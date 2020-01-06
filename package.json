@@ -1,9 +1,16 @@
 {
   "name": "root",
   "private": true,
-  "workspaces": [
-    "apps/*"
-  ],
+  "workspaces": {
+    "packages": [
+      "apps/*"
+    ],
+    "nohoist": [
+      "**/dotenv",
+      "**/typeorm/**",
+      "**/typeorm"
+    ]
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.14.0",
     "@typescript-eslint/parser": "^2.14.0",

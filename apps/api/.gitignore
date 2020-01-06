@@ -4,3 +4,7 @@ node_modules/
 build/
 tmp/
 temp/
+db/data/
+src/**/*.js
+src/**/*.js.map
+ormconfig.env

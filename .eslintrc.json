@@ -10,6 +10,7 @@
     "plugin:import/errors",
     "plugin:import/warnings",
     "plugin:import/typescript",
+    "prettier",
     "prettier/@typescript-eslint"
   ],
   "settings": {
@@ -21,9 +22,19 @@
     }
   },
   "rules": {
+    /*** base es-lint ***/
     "arrow-parens": ["error", "as-needed"], // No unnecessary parentheses
+    "lines-between-class-members": [
+      "error",
+      "always",
+      // allows properties to follow without a line between, but not methods
+      { "exceptAfterSingleLine": true }
+    ],
     "no-console": "off", // For now
+    "no-useless-constructor": "off", // Typescript has its own one that is more appropriate
+    /*** plugins ***/
     "import/extensions": "off", // Typescript will complain about weird imports anyway
+    "import/no-extraneous-dependencies": "off", // Thinks base-level imports are extraneous
     "import/prefer-default-export": "off" // Always use named exports
   }
 }

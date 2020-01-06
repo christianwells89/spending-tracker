@@ -13,9 +13,10 @@
     }
   },
   "rules": {
+    "node/no-extraneous-import": ["error", { "allowModules": ["entities"] }],
+    "node/no-missing-import": "off", // Other Typescript rules are checking imports
     // Complains about ES6 module even though it compiles down to CommonJS
     // node/recommended might update this to ignore in Typescript in future
-    "node/no-unsupported-features/es-syntax": "off",
-    "node/no-missing-import": "off" // Other Typescript rules are checking imports
+    "node/no-unsupported-features/es-syntax": "off"
   }
 }
