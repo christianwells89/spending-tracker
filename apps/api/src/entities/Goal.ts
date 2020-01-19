@@ -1,7 +1,9 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 
-import { Account, User } from 'entities';
 import { BaseEntity } from './Base';
+import { Account } from './Account';
+import { User } from './User';
+// import { Account, User } from 'entities';
 
 // TODO: timeframe, categories/tags, above/below (maybe the goal is to not spend as much in a tag, but it's not really a budget)
 
@@ -21,6 +23,9 @@ export class Goal extends BaseEntity {
 
   @Column({ nullable: true })
   dueDate: Date;
+
+  @Column({ default: false })
+  isComplete: boolean;
 
   @ManyToOne(
     () => User,

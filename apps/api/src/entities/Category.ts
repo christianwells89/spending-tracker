@@ -1,12 +1,8 @@
-// Group is an ordered string array to allow multiple levels
 import { Column, Entity, ManyToOne } from 'typeorm';
 
-import { User } from 'entities';
 import { BaseEntity } from './Base';
+import { User } from './User';
 
-/**
- * Custom categories a user can save to facilitate quicker transaction entering. Never directly used for transactions
- */
 @Entity()
 export class Category extends BaseEntity {
   /**
@@ -18,6 +14,7 @@ export class Category extends BaseEntity {
   @Column({ nullable: true })
   description: string | null;
 
+  // an ordered array to allow multiple levels
   @Column('simple-array')
   group: string[];
 
@@ -26,4 +23,7 @@ export class Category extends BaseEntity {
     user => user.categories,
   )
   user: User;
+
+  @Column()
+  userId: number;
 }

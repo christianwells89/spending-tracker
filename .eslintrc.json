@@ -16,25 +16,36 @@
   "settings": {
     "import/parsers": {
       "@typescript-eslint/parser": [".ts", ".tsx"]
-    },
-    "import/resolver": {
-      "typescript": {}
     }
   },
   "rules": {
     /*** base es-lint ***/
     "arrow-parens": ["error", "as-needed"], // No unnecessary parentheses
+    "class-methods-use-this": "off",
     "lines-between-class-members": [
       "error",
       "always",
       // allows properties to follow without a line between, but not methods
       { "exceptAfterSingleLine": true }
     ],
+    "max-classes-per-file": "off",
     "no-console": "off", // For now
     "no-useless-constructor": "off", // Typescript has its own one that is more appropriate
     /*** plugins ***/
     "import/extensions": "off", // Typescript will complain about weird imports anyway
+    "import/no-cycle": "off", // Needed for TypeORM entities. tsc will fail if it's serious
     "import/no-extraneous-dependencies": "off", // Thinks base-level imports are extraneous
-    "import/prefer-default-export": "off" // Always use named exports
+    "import/prefer-default-export": "off", // Always use named exports
+    "import/order": [
+      "off", // can't get this to recognise baseUrl imports as internal
+      {
+        "alphabetize": { "order": "asc" },
+        "groups": [
+          ["builtin", "external"],
+          ["internal", "parent", "sibling", "index"]
+        ],
+        "newlines-between": "ignore"
+      }
+    ]
   }
 }

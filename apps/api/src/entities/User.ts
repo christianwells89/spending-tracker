@@ -1,13 +1,12 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
-import {
-  Account,
-  Budget,
-  Category,
-  ExpectedTransaction,
-  Transaction,
-} from 'entities';
+import { Account } from './Account';
 import { BaseEntity } from './Base';
+import { Budget } from './Budget';
+import { Category } from './Category';
+import { ExpectedTransaction } from './ExpectedTransaction';
+import { Goal } from './Goal';
+import { Transaction } from './Transaction';
 
 @Entity()
 export class User extends BaseEntity {
@@ -20,8 +19,12 @@ export class User extends BaseEntity {
   @Column()
   email: string;
 
-  @Column('simple-array')
-  hiddenDefaultCategories: string[];
+  // TODO: this should be hashed with bcrypt
+  @Column()
+  password: string;
+
+  @Column()
+  timezone: string;
 
   @OneToMany(
     () => Account,
@@ -54,4 +57,10 @@ export class User extends BaseEntity {
     budget => budget.user,
   )
   budgets: Budget[];
+
+  @OneToMany(
+    () => Goal,
+    goal => goal.user,
+  )
+  goals: Goal[];
 }

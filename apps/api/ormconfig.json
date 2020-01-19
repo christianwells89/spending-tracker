@@ -1,9 +1,14 @@
 {
   "type": "mysql",
-  "synchronize": true,
+  "host": "localhost",
+  "port": 3306,
+  "username": "user",
+  "password": "password",
+  "database": "budget",
   "logging": false,
   "entities": ["src/entities/**/*.ts"],
   "migrations": ["src/migrations/**/*.ts"],
+  "migrationsTableName": "migrations",
   "subscribers": ["src/subscribers/**/*.ts"],
   "cli": {
     "entitiesDir": "src/entities",

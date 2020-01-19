@@ -1,19 +1,11 @@
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
-import {
-  ExpectedTransaction,
-  Reconciliation,
-  Transaction,
-  User,
-} from 'entities';
+import { AccountDTO, AccountType, ReconciliationDTO } from '@st/types';
 import { BaseEntity } from './Base';
-
-export enum AccountType {
-  checking = 'checking',
-  savings = 'savings',
-  creditCard = 'creditCard',
-  cash = 'cash',
-}
+import { ExpectedTransaction } from './ExpectedTransaction';
+import { Reconciliation } from './Reconciliation';
+import { Transaction } from './Transaction';
+import { User } from './User';
 
 @Entity()
 export class Account extends BaseEntity {
@@ -45,6 +37,9 @@ export class Account extends BaseEntity {
   )
   user: User;
 
+  @Column()
+  userId: number;
+
   @OneToMany(
     () => Transaction,
     transaction => transaction.account,
@@ -62,4 +57,17 @@ export class Account extends BaseEntity {
     reconciliation => reconciliation.account,
   )
   reconciliations: Reconciliation[];
+
+  constructor(dto?: AccountDTO, reconciliationDto?: ReconciliationDTO) {
+    super();
+    if (dto && reconciliationDto) {
+      this.type = dto.type;
+      this.description = dto.description;
+      this.institution = dto.institution;
+      this.identifier = dto.identifier;
+      this.tags = dto.tags;
+      this.userId = dto.userId;
+      this.reconciliations = [new Reconciliation(reconciliationDto)];
+    }
+  }
 }

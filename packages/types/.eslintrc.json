@@ -1,0 +1,17 @@
+{
+  "extends": ["../../.eslintrc"],
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".ts"],
+        "moduleDirectory": ["node_modules", "../../node_modules", "src/"]
+      },
+      "typescript": {}
+    }
+  },
+  "rules": {}
+}

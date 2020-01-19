@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "lib": ["dom", "es2018"],
+    "target": "es2018",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "outDir": "./build",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": "src"
+  }
+}

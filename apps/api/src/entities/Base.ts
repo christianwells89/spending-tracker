@@ -1,14 +1,9 @@
-/* eslint-disable max-classes-per-file */
+import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
-import {
-  Column,
-  CreateDateColumn,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
+export abstract class BaseEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
 
-// can't really think of a better name for this
-export abstract class Dated {
   @Column()
   @CreateDateColumn()
   createdAt: Date;
@@ -16,9 +11,7 @@ export abstract class Dated {
   @Column()
   @UpdateDateColumn()
   updatedAt: Date;
-}
 
-export abstract class BaseEntity extends Dated {
-  @PrimaryGeneratedColumn()
-  id: number;
+  // TODO: once everything has a DTO
+  // abstract toDto?(): any;
 }

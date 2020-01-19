@@ -1,0 +1,11 @@
+{
+  "name": "@st/types",
+  "version": "0.0.0",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch"
+  }
+}
