@@ -23,8 +23,8 @@ export class TransactionController {
     const userId = 1;
 
     const transactionRepo = getRepository(Transaction);
-    const transactions = transactionRepo.find({
-      where: { user: { id: userId } },
+    const transactions = await transactionRepo.find({
+      where: { userId },
     });
 
     res.send(transactions);
@@ -34,8 +34,8 @@ export class TransactionController {
     const { id: accountId } = req.params;
 
     const transactionRepo = getRepository(Transaction);
-    const transactions = transactionRepo.find({
-      where: { account: { id: parseInt(accountId, 10) } },
+    const transactions = await transactionRepo.find({
+      where: { accountId: parseInt(accountId, 10) },
     });
 
     res.send(transactions);

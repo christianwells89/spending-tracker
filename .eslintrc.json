@@ -20,7 +20,6 @@
   },
   "rules": {
     /*** base es-lint ***/
-    "arrow-parens": ["error", "as-needed"], // No unnecessary parentheses
     "class-methods-use-this": "off",
     "lines-between-class-members": [
       "error",

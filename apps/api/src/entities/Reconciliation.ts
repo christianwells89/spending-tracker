@@ -6,7 +6,7 @@ import { BaseEntity } from './Base';
 
 @Entity()
 export class Reconciliation extends BaseEntity {
-  @Column('decimal')
+  @Column('decimal', { precision: 20, scale: 2 })
   amount: number;
 
   // This assumes the mysql server is in UTC! May be better to explicitly set this

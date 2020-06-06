@@ -9,4 +9,4 @@ router.get('/', BudgetController.getByUser);
 router.post('/', BudgetController.create);
 router.patch('/:id', BudgetController.update);
 
-export { router as transactionRoutes };
+export { router as budgetRoutes };

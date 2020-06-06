@@ -1,3 +1,5 @@
+import { AccountDTO } from 'account';
+
 export enum TransactionType {
   expense = 'expense',
   income = 'income',
@@ -13,4 +15,5 @@ export interface TransactionDTO {
   tags: string[];
   userId: number;
   accountId: number;
+  account?: AccountDTO;
 }

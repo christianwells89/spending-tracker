@@ -9,7 +9,7 @@ import { User } from './User';
 
 @Entity()
 export class Goal extends BaseEntity {
-  @Column('decimal')
+  @Column('decimal', { precision: 20, scale: 2 })
   amount: number;
 
   @Column()

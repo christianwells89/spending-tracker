@@ -6,7 +6,7 @@ import { User } from './User';
 import { BaseEntity } from './Base';
 
 export abstract class TransactionBase extends BaseEntity {
-  @Column('decimal')
+  @Column('decimal', { precision: 20, scale: 2 })
   amount: number;
 
   @Column({

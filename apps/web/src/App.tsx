@@ -1,26 +1,36 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-const App: React.FC = () => {
+import { Accounts } from 'accounts';
+import { Budgets } from 'budgets';
+import { Header } from 'shared/components/header';
+import { Dash } from 'dash';
+import { Summary } from 'summary';
+import { Transactions } from 'transactions';
+
+export const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Header />
+      <div className="container">
+        <Switch>
+          <Route path="/" exact>
+            <Dash />
+          </Route>
+          <Route path="/accounts">
+            <Accounts />
+          </Route>
+          <Route path="/budgets">
+            <Budgets />
+          </Route>
+          <Route path="/summary">
+            <Summary />
+          </Route>
+          <Route path="/transactions">
+            <Transactions />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
-}
-
-export default App;
+};

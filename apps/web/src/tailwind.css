@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+
+.panel {
+  @apply bg-white shadow-md rounded-lg;
+}
+
+.input-label {
+  @apply block text-sm font-medium text-gray-700;
+}
+
+.input {
+  @apply border border-gray-300 rounded py-1 px-2 block w-full appearance-none leading-tight;
+}
+
+.input:focus {
+  @apply outline-none shadow-outline;
+}
+
+@tailwind utilities;
+
+#menu-toggle:checked + #menu {
+  display: block;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
