@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getRepository } from 'typeorm';
 
-import { AccountDTO, ReconciliationDTO } from '@st/types';
+import { AccountDTO } from '@st/types';
 import { Account, Reconciliation } from 'entities';
 
 export class AccountController {
@@ -17,26 +17,24 @@ export class AccountController {
     }
   }
 
-  static async getByUser(req: Request, res: Response): Promise<void> {
+  static async getByBudget(req: Request, res: Response): Promise<void> {
     // TODO: option to get balance for all as well
     // TODO get this from the JWT token
     const userId = 1;
+    const budgetId = parseInt(req.params.budgetId, 10);
     const accountRepo = getRepository(Account);
 
     const accounts = accountRepo.find({
-      where: { user: { id: userId } },
+      where: { budget: { id: budgetId, userId } },
     });
 
     res.send(accounts);
   }
 
   static async create(req: Request, res: Response): Promise<void> {
-    const {
-      account: accoutDto,
-      reconciliation: reconciliationDto,
-    }: { account: AccountDTO; reconciliation: ReconciliationDTO } = req.body;
-    accoutDto.userId = 1; // TODO get this from the JWT token
-    const account = new Account(accoutDto, reconciliationDto);
+    const { account: accountDto }: { account: AccountDTO } = req.body;
+    accountDto.budgetId = 1;
+    const account = new Account(accountDto);
     const accountRepo = getRepository(Account);
 
     try {
@@ -70,6 +68,7 @@ export class AccountController {
     // this should probably be deferred to an accounts service or something
     // it's also super inefficient. Ideally it should only take the transactions after the last
     // reconcilation
+    // This could also be made into a ViewEntity to make the calculations more reusable
     try {
       account = await accountRepo.findOneOrFail(id, {
         relations: ['reconciliations', 'transactions'],
@@ -84,8 +83,8 @@ export class AccountController {
         current.date > latest.date ? current : latest,
     );
     const balance = account.transactions
-      .filter(t => t.date > lastReconciliation.date)
-      .reduce((sum, t) => sum + t.realAmount, 0);
+      .filter((t) => t.date > lastReconciliation.date)
+      .reduce((sum, t) => sum + t.amount, 0);
 
     res.send(balance);
   }

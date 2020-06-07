@@ -4,7 +4,7 @@ import { BudgetController } from 'controllers/BudgetController';
 
 const router = Router();
 
-router.get('/:id', BudgetController.getById);
+router.get('/:id', BudgetController.getByUid);
 router.get('/', BudgetController.getByUser);
 router.post('/', BudgetController.create);
 router.patch('/:id', BudgetController.update);

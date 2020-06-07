@@ -1,3 +1,4 @@
+import { nanoid } from 'nanoid';
 import { Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 export abstract class BaseEntity {
@@ -14,4 +15,9 @@ export abstract class BaseEntity {
 
   // TODO: once everything has a DTO
   // abstract toDto?(): any;
+}
+
+export abstract class BaseEntityWithUid extends BaseEntity {
+  @Column({ unique: true })
+  uid: string = nanoid();
 }

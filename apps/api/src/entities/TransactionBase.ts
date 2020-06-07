@@ -1,56 +1,48 @@
-import { Column } from 'typeorm';
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+import { Column, OneToMany } from 'typeorm';
 
-import { TransactionDTO, TransactionType } from '@st/types';
+import { TransactionDTO } from '@st/types';
 import { Account } from './Account';
-import { User } from './User';
-import { BaseEntity } from './Base';
+import { BaseEntityWithUid } from './Base';
+import { Envelope } from './Envelope';
 
-export abstract class TransactionBase extends BaseEntity {
+export abstract class TransactionBase extends BaseEntityWithUid {
   @Column('decimal', { precision: 20, scale: 2 })
   amount: number;
-
-  @Column({
-    type: 'enum',
-    enum: TransactionType,
-  })
-  type: TransactionType;
 
   @Column()
   date: Date;
 
-  // kind of a confusing name. Merchant?
-  @Column({ nullable: true })
-  location: string | null;
+  @Column()
+  payee: string;
 
   @Column()
-  description: string;
+  detail: string;
 
   @Column()
-  category: string;
+  cleared: boolean = false;
 
-  @Column('simple-array')
-  tags: string[];
-
-  abstract user: User;
-  abstract account: Account;
+  @Column()
+  isTransfer: boolean = false;
 
   /**
-   * Amount is always positive, the type depends on whether the real amount is negative or positive
+   * Can be null if this is a transfer to another account, or if this is in a tracked account.
    */
-  get realAmount(): number {
-    return this.amount * (this.type === TransactionType.expense ? -1 : 1);
-  }
+  @OneToMany(() => Envelope, (envelope) => envelope.transactions, { nullable: true })
+  envelope: Envelope;
+
+  @Column()
+  envelopeId: number;
+
+  abstract account: Account;
 
   constructor(dto?: TransactionDTO) {
     super();
     if (dto) {
       this.amount = dto.amount;
-      this.type = dto.type;
       this.date = dto.date;
-      this.location = dto.location;
-      this.description = dto.description;
-      this.category = dto.category;
-      this.tags = dto.tags;
+      this.payee = dto.payee;
+      this.envelopeId = dto.envelopeId;
     }
   }
 }

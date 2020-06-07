@@ -19,7 +19,7 @@
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-config-prettier": "^6.9.0",
     "eslint-plugin-import": "^2.19.1",
-    "lerna": "^3.20.2",
-    "typescript": "^3.7.4"
+    "lerna": "^3.22.0",
+    "typescript": "^3.9.5"
   }
 }

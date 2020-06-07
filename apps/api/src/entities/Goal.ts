@@ -1,14 +1,12 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+// TODO: this was from the old design. It needs to be updated.
 
-import { BaseEntity } from './Base';
-import { Account } from './Account';
-import { User } from './User';
-// import { Account, User } from 'entities';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
-// TODO: timeframe, categories/tags, above/below (maybe the goal is to not spend as much in a tag, but it's not really a budget)
+import { BaseEntityWithUid } from './Base';
+import { Envelope } from './Envelope';
 
 @Entity()
-export class Goal extends BaseEntity {
+export class Goal extends BaseEntityWithUid {
   @Column('decimal', { precision: 20, scale: 2 })
   amount: number;
 
@@ -27,14 +25,6 @@ export class Goal extends BaseEntity {
   @Column({ default: false })
   isComplete: boolean;
 
-  @ManyToOne(
-    () => User,
-    user => user.transactions,
-  )
-  user: User;
-
-  // maybe I have it look at categories/tags instead of just an account in future
-  @ManyToMany(() => Account)
-  @JoinTable()
-  accounts: Account[];
+  @ManyToOne(() => Envelope, (envelope) => envelope.goals)
+  envelope: Envelope;
 }

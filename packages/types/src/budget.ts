@@ -7,3 +7,8 @@ export class BudgetDTO {
   rrule?: string;
   userId: number;
 }
+
+export enum Currency {
+  AUD = 'aud',
+  USD = 'usd',
+}

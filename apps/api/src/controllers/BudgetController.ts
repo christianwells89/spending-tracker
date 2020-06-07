@@ -5,12 +5,12 @@ import { BudgetDTO } from '@st/types';
 import { Budget } from 'entities';
 
 export class BudgetController {
-  static async getById(req: Request, res: Response): Promise<void> {
-    const { id } = req.params;
+  static async getByUid(req: Request, res: Response): Promise<void> {
+    const { uid } = req.params;
 
     const budgetRepo = getRepository(Budget);
     try {
-      const budget = await budgetRepo.findOneOrFail(id);
+      const budget = await budgetRepo.findOneOrFail({ uid });
       res.send(budget);
     } catch {
       res.status(404).send('Transaction not found');

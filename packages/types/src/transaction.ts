@@ -1,19 +1,13 @@
-import { AccountDTO } from 'account';
-
-export enum TransactionType {
-  expense = 'expense',
-  income = 'income',
-}
+// import { AccountDTO } from 'account';
 
 export interface TransactionDTO {
   amount: number;
-  type: TransactionType;
   date: Date;
-  location?: string;
-  description: string;
-  category: string;
-  tags: string[];
+  payee: string;
+  detail?: string;
+  envelopeId: number;
   userId: number;
   accountId: number;
-  account?: AccountDTO;
+  accountName?: string;
+  accountIdentifier?: string;
 }

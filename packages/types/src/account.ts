@@ -4,7 +4,8 @@ export enum AccountType {
   creditCard = 'creditCard',
   cash = 'cash',
   retirement = 'retirement',
-  investment = 'investment',
+  investment = 'investment', // generic investment
+  portfolio = 'portfolio',
   property = 'property',
   loan = 'loan',
 }
@@ -15,7 +16,7 @@ export interface AccountDTO {
   institution?: string;
   identifier?: string;
   tags: string[];
-  userId: number;
+  budgetId: number;
   // only in returning:
   balance?: number;
 }

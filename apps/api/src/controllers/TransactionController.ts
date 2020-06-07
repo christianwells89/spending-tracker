@@ -17,18 +17,19 @@ export class TransactionController {
     }
   }
 
-  static async getByUser(req: Request, res: Response): Promise<void> {
-    // TODO: have page params eg. size, current index, order (with direction), after (date)
-    // TODO: get this from the JWT token
-    const userId = 1;
+  // need to figure out
+  // static async getByUser(req: Request, res: Response): Promise<void> {
+  //   // TODO: have page params eg. size, current index, order (with direction), after (date)
+  //   // TODO: get this from the JWT token
+  //   const userId = 1;
 
-    const transactionRepo = getRepository(Transaction);
-    const transactions = await transactionRepo.find({
-      where: { userId },
-    });
+  //   const transactionRepo = getRepository(Transaction);
+  //   const transactions = await transactionRepo.find({
+  //     where: { userId },
+  //   });
 
-    res.send(transactions);
-  }
+  //   res.send(transactions);
+  // }
 
   static async getByAccount(req: Request, res: Response): Promise<void> {
     const { id: accountId } = req.params;
@@ -46,6 +47,9 @@ export class TransactionController {
     dto.userId = 1; // TODO get this from the JWT token
     const transaction = new Transaction(dto);
 
+    // TODO: check when the last reconciliation was and update it with the difference
+    // if date is before then
+
     const transactionRepo = getRepository(Transaction);
     try {
       await transactionRepo.save(transaction);
@@ -59,6 +63,9 @@ export class TransactionController {
   static async update(req: Request, res: Response): Promise<void> {
     const { id } = req.params;
     const dto: Partial<TransactionDTO> = req.body;
+
+    // TODO: check when the last reconciliation was and update it with the difference
+    // if date is before then and amount changed
 
     const transactionRepo = getRepository(Transaction);
     try {

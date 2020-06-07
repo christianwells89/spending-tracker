@@ -1,14 +1,19 @@
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { ChildEntity, Column, Entity, ManyToOne, OneToMany, TableInheritance } from 'typeorm';
 
-import { AccountDTO, AccountType, ReconciliationDTO } from '@st/types';
-import { BaseEntity } from './Base';
-import { ExpectedTransaction } from './ExpectedTransaction';
+import { AccountDTO, AccountType } from '@st/types';
+import { Investment, PropertyValuation } from './AccountChildren';
+import { BaseEntityWithUid } from './Base';
+import { Budget } from './Budget';
+import { ScheduledTransaction } from './ScheduledTransaction';
 import { Reconciliation } from './Reconciliation';
 import { Transaction } from './Transaction';
-import { User } from './User';
 
 @Entity()
-export class Account extends BaseEntity {
+@TableInheritance({ column: { type: 'varchar', name: 'type' } })
+export class Account extends BaseEntityWithUid {
+  @Column()
+  uid: string;
+
   @Column({
     type: 'enum',
     enum: AccountType,
@@ -27,47 +32,52 @@ export class Account extends BaseEntity {
   @Column({ nullable: true })
   identifier: string | null;
 
-  @Column('simple-array')
-  tags: string[];
+  @Column({ nullable: true })
+  notes: string | null;
 
-  @ManyToOne(
-    () => User,
-    user => user.accounts,
-    { nullable: true }, // If it's a shared account
-  )
-  user: User;
+  @ManyToOne(() => Budget, (budget) => budget.accounts)
+  budget: Budget;
 
   @Column()
-  userId: number;
+  budgetId: number;
 
-  @OneToMany(
-    () => Transaction,
-    transaction => transaction.account,
-  )
+  @OneToMany(() => Transaction, (transaction) => transaction.account)
   transactions: Transaction[];
 
-  @OneToMany(
-    () => ExpectedTransaction,
-    expected => expected.account,
-  )
-  expectedTransactions: ExpectedTransaction[];
+  @OneToMany(() => ScheduledTransaction, (expected) => expected.account)
+  scheduledTransactions: ScheduledTransaction[];
 
-  @OneToMany(
-    () => Reconciliation,
-    reconciliation => reconciliation.account,
-  )
+  @OneToMany(() => Reconciliation, (reconciliation) => reconciliation.account)
   reconciliations: Reconciliation[];
 
-  constructor(dto?: AccountDTO, reconciliationDto?: ReconciliationDTO) {
+  constructor(dto?: AccountDTO) {
     super();
-    if (dto && reconciliationDto) {
+    if (dto) {
       this.type = dto.type;
       this.description = dto.description;
       this.institution = dto.institution;
       this.identifier = dto.identifier;
-      this.tags = dto.tags;
-      this.userId = dto.userId;
-      this.reconciliations = [new Reconciliation(reconciliationDto)];
+      this.budgetId = dto.budgetId;
     }
   }
+}
+
+// TODO: make a view entity that gets the current balance from the transactions/reconciliations
+
+@ChildEntity()
+export class Portfolio extends Account {
+  @Column()
+  type: AccountType.portfolio;
+
+  @OneToMany(() => Investment, (investment) => investment.portfolio)
+  investments: Investment[];
+}
+
+@ChildEntity()
+export class Property extends Account {
+  @Column()
+  type: AccountType.property;
+
+  @OneToMany(() => PropertyValuation, (valuation) => valuation.property)
+  valuations: PropertyValuation[];
 }

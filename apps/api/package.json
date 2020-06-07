@@ -4,14 +4,15 @@
   "description": "> TODO: description",
   "license": "ISC",
   "scripts": {
-    "create-migration": "ts-node ./node_modules/typeorm/cli.js migration:generate -n",
+    "create-migration": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:generate -n",
     "migrate": "ts-node ./node_modules/typeorm/cli.js migration:run",
     "start": "ts-node -r tsconfig-paths/register src/index.ts",
     "start:dev": "yarn run _start:db && yarn run _start:api",
     "_start:api": "ts-node-dev -r tsconfig-paths/register src/index.ts",
     "_start:db": "docker-compose -f ./db/docker-compose.yml up -d",
     "_wait_for_db": "wait-on http://localhost:3306",
-    "test": "echo \"Error: run tests from root\" && exit 1"
+    "test": "echo \"Error: run tests from root\" && exit 1",
+    "build": "tsc"
   },
   "dependencies": {
     "@st/types": "*",
@@ -26,8 +27,9 @@
     "jsonwebtoken": "^8.5.1",
     "luxon": "^1.21.3",
     "mysql": "^2.17.1",
+    "nanoid": "^3.1.9",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "0.3.0-rc.2"
+    "typeorm": "0.3.0-rc.19"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
