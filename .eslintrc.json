@@ -45,6 +45,7 @@
         ],
         "newlines-between": "ignore"
       }
-    ]
+    ],
+    "@typescript-eslint/no-inferrable-types": "off"
   }
 }
