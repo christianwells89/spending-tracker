@@ -11,16 +11,14 @@ import React from 'react';
 import DatePicker from 'react-datepicker';
 import { Controller, useForm } from 'react-hook-form';
 
-import { TransactionDTO } from '@st/types';
-
 interface CreateOrEditTransactionProps {
   handleCancel: () => void;
-  handleSubmit: (dto: TransactionDTO) => void;
+  handleSubmit: (dto: any) => void;
 }
 
 export const CreateOrEditTransaction: React.FC<CreateOrEditTransactionProps> = (props) => {
-  const { register, handleSubmit, control } = useForm<TransactionDTO>();
-  const onSubmit = (data: TransactionDTO): void => {
+  const { register, handleSubmit, control } = useForm();
+  const onSubmit = (data: any): void => {
     console.log(data);
     props.handleSubmit(data);
   };
@@ -38,7 +36,7 @@ export const CreateOrEditTransaction: React.FC<CreateOrEditTransactionProps> = (
               className="input"
               placeholder="Account"
             />
-            <Controller as={DatePicker} name="date" control={control} defaultValue={new Date()} />
+            {/* <Controller as={DatePicker} name="date" control={control} defaultValue={new Date()} /> */}
           </div>
           <div>
             <label htmlFor="amount" className="input-label">

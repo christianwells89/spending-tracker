@@ -2,16 +2,14 @@ import { DateTime } from 'luxon';
 import React, { useMemo } from 'react';
 import { CellProps, Column, useTable } from 'react-table';
 
-import { TransactionDTO, TransactionType } from '@st/types';
-
-const DateCell: React.FC<CellProps<TransactionDTO>> = (props) => {
+const DateCell: React.FC<CellProps<any>> = (props) => {
   const date = DateTime.fromISO(props.cell.value).toFormat('d MMM yyyy');
   return <div>{date}</div>;
 };
 
-const AmountCell: React.FC<CellProps<TransactionDTO>> = (props) => {
+const AmountCell: React.FC<CellProps<any>> = (props) => {
   // TODO: when accounts have currencies, use the symbol for that
-  const highlight = props.row.original.type === TransactionType.expense ? 'red' : 'green';
+  const highlight = props.row.original.amount < 0 ? 'red' : 'green';
   const className = `px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${highlight}-100 text-${highlight}-800`;
 
   return <div className={className}>{`$${props.cell.value}`}</div>;
@@ -28,7 +26,7 @@ const columnDefinitions: Column[] = [
 ];
 
 interface TransactionsGridProps {
-  data: TransactionDTO[];
+  data: any[];
 }
 
 export const TransactionsGrid: React.FC<TransactionsGridProps> = (props) => {

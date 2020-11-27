@@ -19,9 +19,9 @@ export class BudgetResolver {
   }
 
   @Query(() => [Budget])
-  budgets(@Arg('userId') userId: number): Promise<Budget[]> {
+  budgets(): Promise<Budget[]> {
     // TODO: use context for userId
-    return this.budgetRepository.find({ userId });
+    return this.budgetRepository.find({ userId: 1 });
   }
 
   @Mutation(() => Budget)

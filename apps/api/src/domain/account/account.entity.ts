@@ -10,14 +10,11 @@ import { ScheduledTransaction, Transaction } from 'domain/transaction';
 
 @Entity()
 @ObjectType()
-@TableInheritance({ column: { type: 'varchar', name: 'type' } })
+@TableInheritance({ column: { type: 'varchar', name: 'entityType' } })
 export class Account extends BaseEntityWithUid {
-  @Column({
-    type: 'enum',
-    enum: AccountType,
-  })
+  @Column({ type: 'enum', enum: AccountType })
   @Field()
-  kind: AccountType; // "type" seems to cause issues with typeORM, maybe it's a prop name of theirs
+  type: AccountType; // "type" seems to cause issues with typeORM, maybe it's a prop name of theirs
 
   @Column()
   @Field()
@@ -65,7 +62,7 @@ export class Account extends BaseEntityWithUid {
 @ChildEntity({ name: 'account_portfolio' })
 export class Portfolio extends Account {
   @Column()
-  kind: AccountType.portfolio;
+  type: AccountType.portfolio;
 
   @Column()
   trackSpending: false;
@@ -77,7 +74,7 @@ export class Portfolio extends Account {
 @ChildEntity({ name: 'account_property' })
 export class Property extends Account {
   @Column()
-  kind: AccountType.property;
+  type: AccountType.property;
 
   @Column()
   trackSpending: false;

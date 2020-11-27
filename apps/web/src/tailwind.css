@@ -1,23 +1,10 @@
 @tailwind base;
 @tailwind components;
-
-.panel {
-  @apply bg-white shadow-md rounded-lg;
-}
-
-.input-label {
-  @apply block text-sm font-medium text-gray-700;
-}
-
-.input {
-  @apply border border-gray-300 rounded py-1 px-2 block w-full appearance-none leading-tight;
-}
-
-.input:focus {
-  @apply outline-none shadow-outline;
-}
-
 @tailwind utilities;
+
+html {
+  font-size: 12px;
+}
 
 #menu-toggle:checked + #menu {
   display: block;
@@ -33,4 +20,14 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type='number'] {
   -moz-appearance: textfield;
+}
+
+@import url('https://rsms.me/inter/inter.css');
+html {
+  font-family: 'Inter', sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: 'Inter var', sans-serif;
+  }
 }

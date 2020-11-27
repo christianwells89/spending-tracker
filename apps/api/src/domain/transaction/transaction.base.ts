@@ -17,7 +17,7 @@ export abstract class TransactionBase extends BaseEntityWithUid {
 
   @Column()
   @Field()
-  payee: string;
+  payee: string; // TODO: break this out into its own table
 
   @Column({ nullable: true })
   @Field({ nullable: true })
@@ -34,18 +34,15 @@ export abstract class TransactionBase extends BaseEntityWithUid {
   /**
    * Can be null if this is a transfer to another account, or if this is in a tracked account.
    */
-  @OneToMany(() => Envelope, (envelope) => envelope.transactions, { nullable: true })
-  envelope: Envelope;
-
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   envelopeId: number;
 
   @OneToMany(() => EnvelopeSub, (sub) => sub.transactions, { nullable: true })
   subEnvelope: EnvelopeSub;
 
-  @Column()
-  @Field()
+  @Column({ nullable: true })
+  @Field({ nullable: true })
   subEnvelopeId: number;
 
   abstract account: Account;

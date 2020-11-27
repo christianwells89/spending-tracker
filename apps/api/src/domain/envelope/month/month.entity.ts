@@ -14,7 +14,7 @@ export class EnvelopeMonth extends BaseEntityWithUid {
    * A full date of midnight on the first day of the month.
    */
   @Column()
-  @Field()
+  @Field(() => String) // returns a MonthInYear string to the outside
   month: Date;
 
   // eslint-disable-next-line @typescript-eslint/no-inferrable-types
@@ -22,7 +22,10 @@ export class EnvelopeMonth extends BaseEntityWithUid {
   @Field(() => Float)
   allocated: number;
 
+  @Field(() => Float)
   activity?: number;
+
+  @Field(() => Float)
   available?: number;
 
   @ManyToOne(() => Envelope, (envelope) => envelope.months)
@@ -33,6 +36,5 @@ export class EnvelopeMonth extends BaseEntityWithUid {
   envelopeId: number;
 }
 
-// TODO: make a view entity that includes activity and balance. This will get expensive fast if
-// many people are using the app at once or if they have a lot of envelopes so this should be
-// cached where possible at scale.
+// TODO: make a view entity that includes activity and available? There are field resolvers for
+// these right now.

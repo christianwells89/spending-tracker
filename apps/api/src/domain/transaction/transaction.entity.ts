@@ -1,15 +1,26 @@
 import { ObjectType, Field, Int } from 'type-graphql';
-import { Entity, ManyToOne } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
+import { TransactionState } from '@st/types';
 import { ScheduledTransaction } from './scheduled/scheduled.entity';
 import { TransactionBase } from './transaction.base';
 import { Account } from 'domain/account';
+import { Envelope } from 'domain/envelope';
 
 @Entity()
 @ObjectType()
 export class Transaction extends TransactionBase {
+  @Column({ type: 'enum', enum: TransactionState, default: TransactionState.pending })
+  @Field()
+  state: TransactionState;
+
   @ManyToOne(() => Account, (account) => account.transactions)
+  @Field(() => Account)
   account: Account;
+
+  @ManyToOne(() => Envelope, (envelope) => envelope.transactions, { nullable: true })
+  @Field(() => Envelope, { nullable: true })
+  envelope: Envelope;
 
   @ManyToOne(() => ScheduledTransaction, { nullable: true })
   scheduledTransaction: ScheduledTransaction;

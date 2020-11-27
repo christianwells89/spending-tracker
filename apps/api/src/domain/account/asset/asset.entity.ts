@@ -25,6 +25,9 @@ export class Asset extends BaseEntityWithUid {
   @Column()
   date: Date;
 
+  @Column('decimal', { precision: 20, scale: 2 })
+  purchasePrice: number;
+
   @ManyToOne(() => Portfolio, (portfolio) => portfolio.securities)
   portfolio: Portfolio;
 }

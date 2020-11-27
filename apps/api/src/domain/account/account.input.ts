@@ -6,7 +6,7 @@ import { Account } from './account.entity';
 @InputType()
 export class AccountInput implements Partial<Account> {
   @Field(() => AccountType)
-  kind: AccountType;
+  type: AccountType;
 
   @Field()
   name: string;

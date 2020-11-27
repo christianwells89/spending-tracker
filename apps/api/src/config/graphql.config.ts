@@ -4,7 +4,7 @@ import { buildSchema, registerEnumType } from 'type-graphql';
 import { Container as container } from 'typedi';
 
 import { AccountType, Currency } from '@st/types';
-import { resolvers } from 'domain/resolvers';
+import { resolvers } from '../domain/resolvers';
 
 export async function initializeGraphQL(app: ExpressApp): Promise<ApolloServer> {
   registerEnumType(AccountType, { name: 'AccountType', description: 'Types of accounts' });

@@ -27,6 +27,7 @@ export class User extends BaseEntity {
   @Field({ nullable: true })
   timezone?: string;
 
-  @OneToMany(() => Budget, (budget) => budget.user)
+  @OneToMany(() => Budget, (budget) => budget.user, { eager: true })
+  @Field(() => [Budget])
   budgets: Budget[];
 }

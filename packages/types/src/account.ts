@@ -9,14 +9,3 @@ export enum AccountType {
   property = 'property',
   loan = 'loan',
 }
-
-export interface AccountDTO {
-  type: AccountType;
-  description: string;
-  institution?: string;
-  identifier?: string;
-  tags: string[];
-  budgetId: number;
-  // only in returning:
-  balance?: number;
-}

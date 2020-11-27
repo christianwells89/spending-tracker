@@ -19,8 +19,8 @@ export class AccountResolver {
   }
 
   @Query(() => [Account])
-  accounts(@Arg('budgetId') budgetId: number): Promise<Account[]> {
-    return this.accountRepository.find({ where: { budgetId } });
+  accounts(@Arg('budgetId') budgetId: string): Promise<Account[]> {
+    return this.accountRepository.find({ where: { budgetId: parseInt(budgetId, 10) } });
   }
 
   @Mutation(() => Account)

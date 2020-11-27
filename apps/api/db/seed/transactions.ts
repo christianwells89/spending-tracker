@@ -1,0 +1,52 @@
+import { TransactionState } from '@st/types';
+
+export const transactions = [
+  {
+    id: 1,
+    uid: '61We76AD4F52G-7JFBWoM',
+    amount: 2150.49,
+    date: new Date(2020, 4, 30),
+    payee: 'Salary',
+    state: TransactionState.cleared,
+    envelopeId: 1,
+    accountId: 1,
+  },
+  {
+    id: 2,
+    uid: '4YOGkRAF8Vnr4a9m1HIVM',
+    amount: -800,
+    date: new Date(2020, 5, 1),
+    payee: 'Rent',
+    state: TransactionState.cleared,
+    envelopeId: 2,
+    accountId: 1,
+  },
+  {
+    id: 3,
+    uid: 'IzEtabDFxUP-a6DqfHXqZ',
+    amount: 7000,
+    date: new Date(2020, 4, 1),
+    state: TransactionState.reconciled,
+    envelopeId: 3,
+    payee: 'Opening Balance',
+    accountId: 3,
+  },
+  {
+    id: 4,
+    uid: 'hWGXwYliYDC6sVis_H12h',
+    amount: -88,
+    date: new Date(2020, 5, 3),
+    payee: 'Star Market',
+    envelopeId: 4,
+    accountId: 2,
+  },
+  {
+    id: 5,
+    uid: 'MZAC7TSGODRkrU54Pm1pa',
+    amount: 48070.34,
+    date: new Date(2020, 4, 1),
+    state: TransactionState.reconciled,
+    payee: 'Opening Balance',
+    accountId: 4,
+  },
+];

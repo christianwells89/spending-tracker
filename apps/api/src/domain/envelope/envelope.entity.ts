@@ -29,7 +29,6 @@ export class Envelope extends BaseEntityWithUid {
    * A user will have only one envelope with this true, and it will be a special, hidden one that
    * is used by us to assign inflow money to.
    */
-  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @Column({ default: false })
   @Field()
   isIntake: boolean;
@@ -38,13 +37,15 @@ export class Envelope extends BaseEntityWithUid {
   @Field({ nullable: true })
   hiddenFrom: Date;
 
-  @OneToMany(() => EnvelopeMonth, (month) => month.envelope)
+  @OneToMany(() => EnvelopeMonth, (month) => month.envelope, { cascade: true })
   months: EnvelopeMonth[];
 
   @ManyToOne(() => EnvelopeGroup, (group) => group.envelopes, { nullable: true })
+  @Field(() => EnvelopeGroup, { nullable: true })
   group: EnvelopeGroup;
 
   @Column({ nullable: true })
+  @Field(() => Int, { nullable: true })
   groupId: number;
 
   @ManyToOne(() => Budget, (budget) => budget.envelopes)

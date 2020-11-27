@@ -3,15 +3,15 @@
 import React, { useState } from 'react';
 import Modal from 'react-modal';
 
-import { TransactionDTO } from '@st/types';
 import { CreateOrEditTransaction } from './createOrEdit';
 import { TransactionsGrid } from './grid';
-import { useAxios } from 'shared/effects/useAxios';
+// import { useAxios } from 'shared/hooks/useAxios';
 
 export const Transactions: React.FC = () => {
   const [filterIsOpen, setFilterIsOpen] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [transactions, isLoading] = useAxios<TransactionDTO[]>('transaction', []);
+  // const [transactions, isLoading] = useAxios('transaction', []);
+  const transactions: any[] = [];
 
   // can't set opacity for the overlay because then the modal can't go higher than it.
   // Need to use an rgb background with opacity to achieve that.

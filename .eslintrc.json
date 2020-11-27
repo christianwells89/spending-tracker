@@ -46,6 +46,9 @@
         "newlines-between": "ignore"
       }
     ],
-    "@typescript-eslint/no-inferrable-types": "off"
+    "@typescript-eslint/no-inferrable-types": "off",
+    "no-shadow": "off", // base rule must be disabled as it can report incorrect errors
+    "@typescript-eslint/no-shadow": ["error"],
+    "no-debugger": "warn"
   }
 }

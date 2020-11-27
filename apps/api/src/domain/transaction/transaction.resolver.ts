@@ -18,17 +18,18 @@ export class TransactionResolver {
 
   @Query(() => [Transaction])
   transactions(
-    @Arg('accountId', { nullable: true }) accountId?: number,
-    @Arg('budgetId', { nullable: true }) budgetId?: number,
+    @Arg('accountId', { nullable: true }) accountId?: string,
+    @Arg('budgetId', { nullable: true }) budgetId?: string,
   ): Promise<Transaction[]> {
-    let query = this.transactionRepository.createQueryBuilder('transaction');
+    let query = this.transactionRepository
+      .createQueryBuilder('transaction')
+      .innerJoinAndSelect('transaction.account', 'account')
+      .leftJoinAndSelect('transaction.envelope', 'envelope');
 
     if (accountId) {
-      query = query.where('transaction.accountId = :accountId', { accountId });
+      query = query.where('account.id = :accountId', { accountId });
     } else if (budgetId) {
-      query = query
-        .innerJoin('transaction.account', 'account')
-        .where('account.budgetId = :budgetId', { budgetId });
+      query = query.where('account.budgetId = :budgetId', { budgetId });
     } else {
       throw new Error('accountId or budgetId is required');
     }

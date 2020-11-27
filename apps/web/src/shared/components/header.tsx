@@ -30,11 +30,9 @@ export const Header: React.FC = () => {
 
       <div className="hidden lg:flex lg:items-center lg:w-auto w-full" id="menu">
         <nav>
-          <ul className="lg:flex items-center justify-between text-xs text-gray-700 pt-4 lg:pt-0">
-            <NavItem to="/accounts" text="Accounts" />
-            <NavItem to="/transactions" text="Transactions" />
+          <ul className="lg:flex items-center justify-between text-gray-700 pt-4 lg:pt-0">
             <NavItem to="/budgets" text="Budgets" />
-            <NavItem to="/summary" text="Summary" />
+            <NavItem to="/reports" text="Reports" />
           </ul>
         </nav>
       </div>
@@ -47,7 +45,7 @@ interface NavItemProps {
   text: string;
 }
 
-const NavItem: React.FC<NavItemProps> = props => {
+const NavItem: React.FC<NavItemProps> = (props) => {
   const { to, text } = props;
 
   return (

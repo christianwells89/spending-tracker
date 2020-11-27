@@ -1,0 +1,13 @@
+diff --git a/node_modules/react-scripts/scripts/utils/verifyTypeScriptSetup.js b/node_modules/react-scripts/scripts/utils/verifyTypeScriptSetup.js
+index 00139ee..e9583a2 100644
+--- a/node_modules/react-scripts/scripts/utils/verifyTypeScriptSetup.js
++++ b/node_modules/react-scripts/scripts/utils/verifyTypeScriptSetup.js
+@@ -235,7 +235,7 @@ function verifyTypeScriptSetup() {
+           )} value: ${chalk.cyan.bold(suggested)} (this can be changed)`
+         );
+       }
+-    } else if (parsedCompilerOptions[option] !== valueToCheck) {
++    } else if (parsedCompilerOptions[option] !== valueToCheck && option !== "jsx") {
+       appTsConfig.compilerOptions[option] = value;
+       messages.push(
+         `${coloredOption} ${chalk.bold(
