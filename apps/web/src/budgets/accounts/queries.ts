@@ -30,8 +30,8 @@ export const GET_ACCOUNT = gql`
 `;
 
 export const GET_TRANSACTIONS = gql`
-  query transactions($accountI: String, $budgetId: String) {
-    transactions(accountI: $accountI, budgetId: $budgetId) {
+  query transactions($accountId: String, $budgetId: String) {
+    transactions(accountId: $accountId, budgetId: $budgetId) {
       id
       amount
       date

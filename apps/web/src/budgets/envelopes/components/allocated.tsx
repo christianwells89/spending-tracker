@@ -22,7 +22,7 @@ export const Allocated: React.FC<AllocatedProps> = (props) => {
   const { currency } = useRecoilValue(currentBudgetQuery);
 
   const text = formatMoney(props.allocated, currency);
-  const className = `px-2  ml-auto -mr-2 bg-blue-100 hover:bg-blue-200 active:bg-blue-300\
+  const className = `px-2  ml-auto -mr-2 bg-blue-200 hover:bg-blue-300 active:bg-blue-400\
     text-blue-800 font-semibold rounded-full outline-none focus:outline-none`;
 
   return (

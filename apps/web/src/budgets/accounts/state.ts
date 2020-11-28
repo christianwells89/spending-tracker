@@ -25,6 +25,24 @@ export interface Transaction {
   isTransfer: boolean;
 }
 
+export enum AccountTypeGroup {
+  spending = 'spending',
+  saving = 'saving',
+  tracking = 'tracking',
+}
+
+export const AccountTypeRecord: Record<AccountType, AccountTypeGroup> = {
+  checking: AccountTypeGroup.spending,
+  savings: AccountTypeGroup.saving,
+  creditCard: AccountTypeGroup.spending,
+  cash: AccountTypeGroup.spending,
+  retirement: AccountTypeGroup.tracking,
+  investment: AccountTypeGroup.tracking,
+  portfolio: AccountTypeGroup.tracking,
+  property: AccountTypeGroup.tracking,
+  loan: AccountTypeGroup.tracking,
+};
+
 export const allAccountsQuery = selector({
   key: 'AllAccountsQuery',
   get: async ({ get }) => {
@@ -78,5 +96,24 @@ export const transactionsQuery = selectorFamily({
     });
     if (response.errors) throw response.errors;
     return response.data.transactions;
+  },
+});
+
+export const accountsInTypesQuery = selector({
+  key: 'AccountsInTypesQuery',
+  get: ({ get }) => {
+    const accounts = get(allAccountsQuery);
+
+    // Could do this on one loop with a complicated reduce, or use lodash.partition, but this is
+    // just easier to read and performance isn't so important here because this is memo-ised.
+    const spending = accounts.filter(
+      (a) => AccountTypeRecord[a.type] === AccountTypeGroup.spending,
+    );
+    const saving = accounts.filter((a) => AccountTypeRecord[a.type] === AccountTypeGroup.saving);
+    const tracking = accounts.filter(
+      (a) => AccountTypeRecord[a.type] === AccountTypeGroup.tracking,
+    );
+
+    return { spending, saving, tracking };
   },
 });

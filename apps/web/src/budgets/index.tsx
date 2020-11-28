@@ -4,6 +4,7 @@ import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router'
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import { MonthInYear } from '@st/types';
+import { Account, AllAccounts } from './accounts';
 import { Envelopes } from './envelopes';
 import {
   budgetsQuery,
@@ -16,20 +17,18 @@ export const Budgets: React.FC = () => {
   const { path } = useRouteMatch();
 
   return (
-    <div>
-      <Switch>
-        <Route exact path={path}>
-          <React.Suspense fallback={<div>Loading budgets...</div>}>
-            <BudgetRedirect />
-          </React.Suspense>
-        </Route>
-        <Route path={`${path}/:uid`}>
-          <React.Suspense fallback={<div>Loading budget...</div>}>
-            <Budget />
-          </React.Suspense>
-        </Route>
-      </Switch>
-    </div>
+    <Switch>
+      <Route exact path={path}>
+        <React.Suspense fallback={<div>Loading budgets...</div>}>
+          <BudgetRedirect />
+        </React.Suspense>
+      </Route>
+      <Route path={`${path}/:uid`}>
+        <React.Suspense fallback={<div>Loading budget...</div>}>
+          <Budget />
+        </React.Suspense>
+      </Route>
+    </Switch>
   );
 };
 
@@ -70,17 +69,17 @@ const Budget: React.FC = () => {
   // to be recoil-ified as well.
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto px-2">
       <Switch>
         <Route path={`${path}/envelopes/:month`}>
           <Envelopes />
         </Route>
-        {/* <Route exact path={`${path}/accounts`}>
-              <AllAccounts />
-            </Route>
-            <Route path={`${path}/accounts/:uid?`}>
-              <Account />
-            </Route> */}
+        <Route exact path={`${path}/accounts`}>
+          <AllAccounts />
+        </Route>
+        <Route path={`${path}/accounts/:uid?`}>
+          <Account />
+        </Route>
         <Redirect to={`${path}/envelopes/${monthInYear}`} />
       </Switch>
     </div>

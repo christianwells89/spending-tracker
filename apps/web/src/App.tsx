@@ -7,7 +7,8 @@ import { RecoilRoot } from 'recoil';
 import { Budgets } from 'budgets';
 import { Reports } from 'reports';
 import { RequireAuth } from 'shared/auth/requireAuth';
-import { Header } from 'shared/components/header';
+import { SometimesHeader } from 'shared/components/header';
+import { Navbar } from 'shared/components/navbar';
 
 export const cache = new InMemoryCache();
 export const apolloClient = new ApolloClient({
@@ -28,8 +29,9 @@ export const App: React.FC = () => {
         <RecoilRoot>
           <Router>
             <RequireAuth>
-              <div className="h-full flex flex-col">
-                <Header />
+              <SometimesHeader />
+              <div className="flex-1 flex">
+                <Navbar />
                 <Switch>
                   <Route path="/budgets">
                     <Budgets />

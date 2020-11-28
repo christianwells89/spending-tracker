@@ -38,10 +38,16 @@ export const EnvelopeLine: React.FC<EnvelopeLineProps> = ({ envelope }) => {
       // ref={ref}
     >
       <div>{name}</div>
-      <div className="grid grid-cols-3 text-right">
-        <Allocated allocated={allocated} envelopeId={id} month={month} />
-        <div className="cursor-default">{formatMoney(activity, currency)}</div>
-        <Available available={available} envelopeId={id} month={month} />
+      <div className="flex">
+        <div className="flex-1 text-right">
+          <Allocated allocated={allocated} envelopeId={id} month={month} />
+        </div>
+        <div className="flex-1 text-right hidden sm:block">
+          <div className="cursor-default">{formatMoney(activity, currency)}</div>
+        </div>
+        <div className="flex-1 text-right">
+          <Available available={available} envelopeId={id} month={month} />
+        </div>
       </div>
     </div>
   );

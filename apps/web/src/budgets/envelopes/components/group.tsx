@@ -22,10 +22,10 @@ export const Group: React.FC<GroupProps> = ({ id, name }) => {
     <Panel className="flex flex-col w-full text-sm">
       <div className="grid grid-cols-2 px-4 pt-2 pb-2 leading-4 font-medium text-gray-400 uppercase tracking-wider">
         <div>{name}</div>
-        <div className="grid grid-cols-3 text-right">
-          <div>{formatMoney(totalAllocated, currency)}</div>
-          <div>{formatMoney(totalActivity, currency)}</div>
-          <div>{formatMoney(totalAvailable, currency)}</div>
+        <div className="flex text-right">
+          <div className="flex-1">{formatMoney(totalAllocated, currency)}</div>
+          <div className="flex-1 hidden sm:block">{formatMoney(totalActivity, currency)}</div>
+          <div className="flex-1">{formatMoney(totalAvailable, currency)}</div>
         </div>
       </div>
       {envelopes.map((e) => {

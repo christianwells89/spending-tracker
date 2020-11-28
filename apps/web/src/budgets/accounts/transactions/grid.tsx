@@ -62,7 +62,7 @@ export const TransactionsGrid: React.FC<TransactionsGridProps> = ({ data, showAc
   // https://github.com/tannerlinsley/react-table/tree/master/examples/row-selection
 
   return (
-    <div className="-mx-6 shadow-md overflow-hidden rounded-lg border-b border-gray-200">
+    <div className="shadow-md overflow-hidden rounded-lg border-b border-gray-200">
       <table className="w-full bg-white border-collapse text-left" {...getTableProps()}>
         <thead>
           {headerGroups.map((headerGroup) => (

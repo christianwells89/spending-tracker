@@ -18,12 +18,14 @@ import { envelopeSelectedQuery, envelopeSelectedState } from '../state';
 // Or this tailwind one:
 // https://tailwindui.com/components/application-ui/overlays/slide-overs#component-91416d48f50d19d1ad826e5a6c77b1e9
 
+// The activity column is hidden in sm so it should be in here as well.
+
 // Still not entirely happy with this name
 export const Actions: React.FC = () => {
   const envelopeSelectedId = useRecoilValue(envelopeSelectedState);
 
   return (
-    <Panel className="flex-1">
+    <Panel className="flex-1 max-w-md">
       {envelopeSelectedId === null ? <AllEnvelopesActions /> : <SingleEnvelopeActions />}
     </Panel>
   );
