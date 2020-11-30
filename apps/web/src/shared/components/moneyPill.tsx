@@ -56,7 +56,7 @@ export const MoneyPill: React.FC<MoneyPillProps> = (props) => {
   const classes = colourClasses[colour];
   if (isClickable) classes.push(...clickableColourClasses[colour]);
 
-  const className = `px-2 -mr-2 text-sm font-semibold rounded-full outline-none\
+  const className = `px-2 text-sm font-semibold rounded-full outline-none\
     focus:outline-none ${cursor} ${classes.join(' ')} ${inputClassName}`;
 
   return (

@@ -23,6 +23,8 @@ export interface Transaction {
   detail: string;
   state: TransactionState;
   isTransfer: boolean;
+  account: { id: string; name: string };
+  envelope: { id: string; name: string };
 }
 
 export enum AccountTypeGroup {

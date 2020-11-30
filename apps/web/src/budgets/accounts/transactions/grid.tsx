@@ -1,36 +1,12 @@
 import { DateTime } from 'luxon';
 import React, { useMemo } from 'react';
 import { CellProps, Column, useFlexLayout, useTable } from 'react-table';
-import { useRecoilValue } from 'recoil';
 
-import { currentBudgetQuery } from 'budgets/state';
-import { formatMoney } from 'shared/utils/money';
+import { TransactionState } from '@st/types';
+import { CheckSolid, LockSolid } from 'shared/components/icons';
+import { MoneyPill } from 'shared/components/moneyPill';
+import { assertUnreachable } from 'shared/utils/check';
 import { Transaction } from '../state';
-
-const DateCell: React.FC<CellProps<Transaction>> = (props) => {
-  const date = DateTime.fromISO(props.cell.value).toFormat('d MMM yyyy');
-  return <div>{date}</div>;
-};
-
-const AmountCell: React.FC<CellProps<Transaction>> = (props) => {
-  const { currency } = useRecoilValue(currentBudgetQuery);
-  const highlight = props.row.original.amount < 0 ? 'red' : 'green';
-  const className = `px-2 inline-flex text-sm leading-5 font-semibold rounded-full bg-${highlight}-100 text-${highlight}-800`;
-  const formattedAmount = formatMoney(props.cell.value, currency);
-
-  return <div className={className}>{formattedAmount}</div>;
-};
-
-const columnDefinitions: Column[] = [
-  { Header: 'Date', accessor: 'date', Cell: DateCell, width: 2.3 },
-  { Header: 'Payee', accessor: 'payee', width: 5 },
-  { Header: 'Envelope', accessor: 'envelope.name', width: 5 },
-  { Header: 'Detail', accessor: 'detail', width: 4 },
-  // TODO: make a component for this, using icons
-  { Header: 'Amount', accessor: 'amount', Cell: AmountCell, width: 3 },
-  { Header: 'State', accessor: 'state', width: 1 },
-];
-const accountColumn: Column = { Header: 'Account', accessor: 'account.name', width: 3 };
 
 interface TransactionsGridProps {
   data: Transaction[];
@@ -39,8 +15,7 @@ interface TransactionsGridProps {
 
 export const TransactionsGrid: React.FC<TransactionsGridProps> = ({ data, showAccount }) => {
   const columns = useMemo(() => {
-    if (showAccount)
-      return [...columnDefinitions.slice(0, 2), accountColumn, ...columnDefinitions.slice(2)];
+    if (showAccount) return [accountColumn, ...columnDefinitions];
     return columnDefinitions;
   }, [showAccount]);
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable(
@@ -48,6 +23,8 @@ export const TransactionsGrid: React.FC<TransactionsGridProps> = ({ data, showAc
       columns,
       data,
     },
+    // TODO: will need to remove this and handle flex myself when doing the resposive version of
+    // this because it's using styles so I can't use classes to put responsive breakpoints on CSS.
     useFlexLayout,
   );
 
@@ -62,45 +39,131 @@ export const TransactionsGrid: React.FC<TransactionsGridProps> = ({ data, showAc
   // https://github.com/tannerlinsley/react-table/tree/master/examples/row-selection
 
   return (
-    <div className="shadow-md overflow-hidden rounded-lg border-b border-gray-200">
-      <table className="w-full bg-white border-collapse text-left" {...getTableProps()}>
-        <thead>
-          {headerGroups.map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((column) => (
-                <th
-                  className="px-1 py-1 border-b border-gray-200 bg-gray-100 text-sm leading-4 font-medium text-gray-500 uppercase tracking-wider"
-                  {...column.getHeaderProps()}
-                >
-                  {column.render('Header')}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...getTableBodyProps()}>
-          {rows.map((row, rowIndex, array) => {
-            prepareRow(row);
-            return (
-              <tr
-                // The "last:" tailwind class isn't working here so it has to be ugly
-                className={`font-light text-sm leading-5 ${
-                  rowIndex === array.length - 1 ? 'border-none' : 'border-b border-gray-200'
-                }`}
-                {...row.getRowProps()}
+    <table className="w-full border-collapse" {...getTableProps()}>
+      <thead className="rounded-md shadow-md">
+        {headerGroups.map((headerGroup) => (
+          <tr className="bg-gray-50 px-4 py-1 rounded-md" {...headerGroup.getHeaderGroupProps()}>
+            {headerGroup.headers.map((column) => (
+              <th
+                className="flex pl-2 first:pl-0 text-sm leading-4 font-medium text-gray-400 uppercase tracking-wider"
+                {...column.getHeaderProps()}
               >
-                {row.cells.map((cell) => {
-                  return (
-                    <td className="px-1 py-1" {...cell.getCellProps()}>
-                      {cell.render('Cell')}
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+                {column.render('Header')}
+              </th>
+            ))}
+          </tr>
+        ))}
+      </thead>
+      <tbody className="h-2 block" />
+      <tbody className="rounded-lg shadow-md divide-y divide-gray-200" {...getTableBodyProps()}>
+        {rows.map((row) => {
+          prepareRow(row);
+          return (
+            <tr
+              className="bg-white px-4 py-1 font-light text-sm leading-5 first:rounded-t-md last:rounded-b-md"
+              {...row.getRowProps()}
+            >
+              {row.cells.map((cell) => {
+                return (
+                  <td
+                    className={`flex pl-2 first:pl-0 ${getColumnClass(cell.column.id)}`}
+                    {...cell.getCellProps()}
+                  >
+                    {cell.render('Cell')}
+                  </td>
+                );
+              })}
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
+};
+
+const DefaultCell: React.FC<CellProps<Transaction>> = (props) => {
+  return <div>{props.cell.value}</div>;
+};
+
+const DateCell: React.FC<CellProps<Transaction>> = (props) => {
+  const date = DateTime.fromISO(props.cell.value).toFormat('d MMM yyyy');
+  return <div>{date}</div>;
+};
+
+const AmountCell: React.FC<CellProps<Transaction>> = (props) => {
+  return <MoneyPill amount={props.cell.value} isClickable={false} className="ml-auto" />;
+};
+
+const StateCell: React.FC<CellProps<Transaction>> = (props) => {
+  const state: TransactionState = props.cell.value;
+
+  const onClick = () => {
+    // TODO: when I implement the transaction mutation this should use it
+    console.log('state should change');
+  };
+
+  switch (state) {
+    case TransactionState.pending:
+      return <CheckSolid className="h-4 m-auto text-gray-500 cursor-pointer" onClick={onClick} />;
+    case TransactionState.cleared:
+      return <CheckSolid className="h-4 m-auto text-green-500 cursor-pointer" onClick={onClick} />;
+    case TransactionState.reconciled:
+      return <LockSolid className="h-4 m-auto text-green-500" />;
+    default:
+      return assertUnreachable(`Unexpected transaction state: ${state}`, state);
+  }
+};
+
+enum ColumnId {
+  date = 'date',
+  payee = 'payee',
+  envelope = 'envelope',
+  detail = 'detail',
+  amount = 'amount',
+  state = 'state',
+  account = 'account',
+}
+
+function getColumnClass(id: string): string {
+  switch (id) {
+    case ColumnId.amount:
+      return 'justify-items-end';
+    case ColumnId.state:
+      return 'justify-items-center items-center';
+    case ColumnId.date:
+    case ColumnId.payee:
+    case ColumnId.envelope:
+    case ColumnId.detail:
+    case ColumnId.account:
+    default:
+      return 'justify-items-start';
+  }
+}
+
+const columnDefinitions: Column[] = [
+  { Header: 'Date', id: ColumnId.date, accessor: 'date', Cell: DateCell, width: 2.3 },
+  { Header: 'Payee', id: ColumnId.payee, accessor: 'payee', Cell: DefaultCell, width: 5 },
+  // TODO: add a property "nameWithGroup" that displays like "Food: Groceries"
+  { Header: 'Envelope', id: ColumnId.envelope, accessor: 'envelope.name', width: 5 },
+  { Header: 'Detail', id: ColumnId.detail, accessor: 'detail', width: 4 },
+  {
+    Header: () => <div className="m-auto">Amount</div>,
+    id: ColumnId.amount,
+    accessor: 'amount',
+    Cell: AmountCell,
+    width: 3,
+  },
+  {
+    Header: () => <div className="m-auto">State</div>,
+    id: ColumnId.state,
+    accessor: 'state',
+    Cell: StateCell,
+    width: 1,
+  },
+];
+const accountColumn: Column = {
+  Header: 'Account',
+  id: ColumnId.account,
+  accessor: 'account.name',
+  width: 3,
 };

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
 
 import { currentBudgetQuery } from 'budgets/state';
@@ -15,6 +16,12 @@ export const NavbarOpenState = atom({
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useRecoilState(NavbarOpenState);
   const budget = useRecoilValue(currentBudgetQuery);
+  const location = useLocation();
+
+  // On change of location, close if it's open
+  useEffect(() => {
+    setIsOpen(false);
+  }, [setIsOpen, location]);
 
   const translation = isOpen ? 'translate-x-0' : '-translate-x-full';
   const barClass = `flex flex-col py-4 px-2 top-0 left-0 w-96 bg-white fixed lg:static h-full\
@@ -23,9 +30,9 @@ export const Navbar: React.FC = () => {
   const bgDisplay = isOpen ? 'absolute' : 'hidden';
   const close = () => setIsOpen(false);
 
-  // TODO:
-  // - when clicking on something it should close as well
-  // - Budget settings page and nav item
+  if (!budget) return null;
+
+  // TODO: Budget settings page and nav item
 
   return (
     <>

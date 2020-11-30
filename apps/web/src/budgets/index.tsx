@@ -69,7 +69,7 @@ const Budget: React.FC = () => {
   // to be recoil-ified as well.
 
   return (
-    <div className="container mx-auto px-2">
+    <div className="container mx-auto p-2">
       <Switch>
         <Route path={`${path}/envelopes/:month`}>
           <Envelopes />

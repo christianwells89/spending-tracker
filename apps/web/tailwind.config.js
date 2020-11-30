@@ -17,6 +17,9 @@ module.exports = {
   variants: {
     extend: {
       backgroundColor: ['active'],
+      borderStyle: ['last'],
+      borderRadius: ['first', 'last'],
+      padding: ['first'],
     },
   },
   plugins: [forms],

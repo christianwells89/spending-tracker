@@ -82,7 +82,7 @@ const AccountTypeGroupSection: React.FC<AccountTypeGroupSectionProps> = (props) 
                   {account.institution ? <span className="mr-1">{account.institution}</span> : null}
                   <span className="truncate">{account.name}</span>
                 </div>
-                <MoneyPill amount={account.balance} isClickable={false} />
+                <MoneyPill amount={account.balance} isClickable={false} className="-mr-2" />
               </div>
             </NavItem>
           );

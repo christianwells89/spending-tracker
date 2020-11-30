@@ -22,6 +22,10 @@ export const apolloClient = new ApolloClient({
   },
 });
 
+// TODO: the navbar using the current budget query has broken things when loading from a minimal URL
+// May need to add a guard component that loads budgets and sets the current one, so that all
+// children can be sure one will exist (or can handle the default budget in the case of none).
+
 export const App: React.FC = () => {
   return (
     <React.Suspense fallback={<div>Loading</div>}>

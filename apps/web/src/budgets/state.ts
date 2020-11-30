@@ -48,14 +48,14 @@ export const currentSelectedBudgetUidState = atom<string>({
   key: 'CurrentSelectedBudgetId',
   // TODO: have an effect to store in localStorage when this is set
   // https://recoiljs.org/docs/guides/atom-effects/#local-storage-persistence
-  default: localStorage.getItem(LAST_BUDGET_ACCESSED_KEY) ?? '0',
+  default: localStorage.getItem(LAST_BUDGET_ACCESSED_KEY) ?? EMPTY_BUDGET_UID,
 });
 
 export const currentBudgetQuery = selector({
   key: 'CurrentBudgetQuery',
   get: async ({ get }) => {
     const selectedUid = get(currentSelectedBudgetUidState);
-    if (selectedUid === '0') return noBudget;
+    if (selectedUid === EMPTY_BUDGET_UID) return noBudget;
     const response = await apolloClient.query<{ budget: Budget }>({
       query: GET_BUDGET,
       variables: { uid: selectedUid },

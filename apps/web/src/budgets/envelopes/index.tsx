@@ -44,7 +44,7 @@ export const Envelopes: React.FC = () => {
   // The empty div is now a budget title component. Does it actually make sense here?
 
   return (
-    <div className="grid grid-cols-3 mt-2 space-x-2">
+    <div className="grid grid-cols-3 space-x-2">
       <div className="col-span-2">
         <div className="grid grid-cols-2 mb-2">
           <BudgetTitle />

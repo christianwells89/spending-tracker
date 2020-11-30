@@ -13,21 +13,23 @@ export const Account: React.FC = () => {
   const transactions = useRecoilValue(transactionsQuery(account.id));
 
   return (
-    <>
+    <div className="space-y-2">
       <AccountsHeader {...account} />
       <Transactions transactions={transactions} showAccount={false} />
-    </>
+    </div>
   );
 };
 
 export const AllAccounts: React.FC = () => {
+  // const { uid } = useParams<{ uid: string }>();
+  // console.log(uid);
   const transactions = useRecoilValue(transactionsQuery(null));
   const balance = useRecoilValue(allAccountsBalanceQuery);
 
   return (
-    <>
+    <div className="flex flex-col space-y-2">
       <AccountsHeader name="All Accounts" balance={balance} />
       <Transactions transactions={transactions} showAccount={true} />
-    </>
+    </div>
   );
 };
