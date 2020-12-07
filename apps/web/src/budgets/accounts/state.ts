@@ -2,7 +2,7 @@ import { selector, selectorFamily } from 'recoil';
 
 import { AccountType, TransactionState } from '@st/types';
 import { apolloClient } from 'App';
-import { currentBudgetQuery } from 'budgets/state';
+import { currentBudgetQuery, EMPTY_BUDGET_ID } from 'budgets/state';
 import { GET_ACCOUNTS, GET_TRANSACTIONS } from './queries';
 
 export interface Account {
@@ -49,6 +49,10 @@ export const allAccountsQuery = selector({
   key: 'AllAccountsQuery',
   get: async ({ get }) => {
     const { id: budgetId } = get(currentBudgetQuery);
+    if (budgetId === EMPTY_BUDGET_ID) {
+      // Selected budget hasn't been set yet
+      return [];
+    }
     const response = await apolloClient.query<{ accounts: Account[] }>({
       query: GET_ACCOUNTS,
       variables: { budgetId },

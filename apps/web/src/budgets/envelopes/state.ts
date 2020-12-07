@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { atom, atomFamily, selector, selectorFamily } from 'recoil';
 
 import { MonthInYear } from '@st/types';
@@ -35,7 +36,16 @@ interface EnvelopeGroup {
 
 export const currentMonthState = atom<MonthInYear>({
   key: 'CurrentMonthState',
-  default: (null as unknown) as MonthInYear,
+  default: DateTime.local().toFormat('yyyy-LL') as MonthInYear,
+});
+
+export const relativeMonthQuery = selectorFamily<MonthInYear, number>({
+  key: 'RelativeMonthQuery',
+  get: (monthsDifference: number) => ({ get }) => {
+    const currentMonth = get(currentMonthState);
+    const currentMonthDate = DateTime.fromISO(currentMonth);
+    return currentMonthDate.plus(monthsDifference).toFormat('yyyy-LL') as MonthInYear;
+  },
 });
 
 export const groupsInBudgetQuery = selector({
@@ -165,12 +175,12 @@ export const groupTotalsQuery = selectorFamily({
       (acc, envelope) => {
         const month = get(monthForEnvelopeQuery(parseInt(envelope.id, 10)));
         if (!month) return acc;
-        acc.totalAllocated += month.allocated;
-        acc.totalActivity += month.activity;
-        acc.totalAvailable += month.available;
+        acc.allocated += month.allocated;
+        acc.activity += month.activity;
+        acc.available += month.available;
         return acc;
       },
-      { totalAllocated: 0, totalActivity: 0, totalAvailable: 0 },
+      { allocated: 0, activity: 0, available: 0 },
     );
   },
 });
