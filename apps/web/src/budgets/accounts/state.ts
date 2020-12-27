@@ -1,4 +1,4 @@
-import { selector, selectorFamily } from 'recoil';
+import { atom, selector, selectorFamily } from 'recoil';
 
 import { AccountType, TransactionState } from '@st/types';
 import { apolloClient } from 'App';
@@ -44,6 +44,11 @@ export const AccountTypeRecord: Record<AccountType, AccountTypeGroup> = {
   property: AccountTypeGroup.tracking,
   loan: AccountTypeGroup.tracking,
 };
+
+export const transactionSelectedState = atom<string | null>({
+  key: 'TransactionSelectedState',
+  default: null,
+});
 
 export const allAccountsQuery = selector({
   key: 'AllAccountsQuery',

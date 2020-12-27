@@ -39,6 +39,21 @@ export const currentMonthState = atom<MonthInYear>({
   default: DateTime.local().toFormat('yyyy-LL') as MonthInYear,
 });
 
+// Without any official way to do this, it will need to be set manually every time the current
+// month is changed.
+export const currentMonthHistoryState = atom<MonthInYear[]>({
+  key: 'CurrentMonthHistoryState',
+  default: [DateTime.local().toFormat('yyyy-LL') as MonthInYear],
+});
+
+export const previousMonthQuery = selector({
+  key: 'PreviousMonthQuery',
+  get: ({ get }) => {
+    const history = get(currentMonthHistoryState);
+    return history.slice(-2, -1)[0];
+  },
+});
+
 export const relativeMonthQuery = selectorFamily<MonthInYear, number>({
   key: 'RelativeMonthQuery',
   get: (monthsDifference: number) => ({ get }) => {

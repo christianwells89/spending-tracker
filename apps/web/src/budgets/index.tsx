@@ -19,12 +19,12 @@ export const Budgets: React.FC = () => {
   return (
     <Switch>
       <Route exact path={path}>
-        <React.Suspense fallback={<div>Loading budgets...</div>}>
+        <React.Suspense fallback={<div className="container">Loading budgets...</div>}>
           <BudgetRedirect />
         </React.Suspense>
       </Route>
       <Route path={`${path}/:uid`}>
-        <React.Suspense fallback={<div>Loading budget...</div>}>
+        <React.Suspense fallback={<div className="container">Loading budget...</div>}>
           <RequireBudget>
             <Budget />
           </RequireBudget>

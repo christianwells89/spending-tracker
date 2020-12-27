@@ -1,6 +1,7 @@
 import { DateTime } from 'luxon';
 import React from 'react';
 import { Link } from 'react-router-dom';
+// import { SwitchTransition, CSSTransition } from 'react-transition-group';
 import { useRecoilValue, useRecoilValueLoadable } from 'recoil';
 
 import { currentBudgetQuery } from 'budgets/state';
@@ -9,10 +10,17 @@ import { MoneyPill } from 'shared/components/moneyPill';
 import { Panel } from 'shared/components/panel';
 import { SkeletonLoader } from 'shared/components/skeletonBlock';
 import { formatMoney } from 'shared/utils/money';
-import { currentMonthState, monthToBeAllocatedQuery, monthTotalsQuery } from '../state';
+import {
+  currentMonthState,
+  monthToBeAllocatedQuery,
+  monthTotalsQuery,
+  // previousMonthQuery,
+} from '../state';
+// import { MonthInYear } from '@st/types';
 
 export const MonthSummary: React.FC = () => {
   const month = useRecoilValue(currentMonthState);
+  // const previousMonth = useRecoilValue(previousMonthQuery);
   const monthDate = DateTime.fromISO(month);
 
   const { currency } = useRecoilValue(currentBudgetQuery);
@@ -31,6 +39,7 @@ export const MonthSummary: React.FC = () => {
           <ChevronLeftOutline className="h-8 rounded-full hover:bg-gray-100 p-1" />
         </Link>
         <div className="my-4">{monthDate.toFormat('LLLL yyyy')}</div>
+        {/* <MonthName currentMonth={month} previousMonth={previousMonth} /> */}
         <Link
           to={(location) => ({
             ...location,
@@ -63,3 +72,34 @@ export const MonthSummary: React.FC = () => {
     </Panel>
   );
 };
+
+// TODO: Figure out how to animate the transition of the month name. Direction should be dependent
+// on whether the next month is ahead or behind the previous one.
+// See https://reactcommunity.org/react-transition-group/switch-transition
+
+// interface MonthNameProps {
+//   currentMonth: MonthInYear;
+//   previousMonth: MonthInYear;
+// }
+
+// const MonthName: React.FC<MonthNameProps> = (props) => {
+//   const currentMonth = DateTime.fromISO(props.currentMonth);
+//   // const previousMonth = DateTime.fromISO(props.previousMonth);
+//   const name = currentMonth.toFormat('LLLL yyyy');
+
+//   return (
+//     <SwitchTransition>
+//       <CSSTransition
+//         addEndListener={(node, done) => node.addEventListener('transitionend', done, false)}
+//         classNames={{
+//           enter: 'transform -translate-x-full',
+//           enterActive: 'transform translate-x-0 transition-transform',
+//           exit: 'transform translate-x-0',
+//           exitActive: 'transform translate-x-full transition-transform',
+//         }}
+//       >
+//         <div className="my-4">{name}</div>
+//       </CSSTransition>
+//     </SwitchTransition>
+//   );
+// };

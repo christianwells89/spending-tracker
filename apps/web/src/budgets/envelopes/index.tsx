@@ -1,25 +1,27 @@
 import { DateTime } from 'luxon';
 import React, { useEffect } from 'react';
 import { Redirect, useParams } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { MonthInYear } from '@st/types';
 import { isMonthValid } from 'shared/utils/date';
 import { Actions } from './components/actions';
+import { AddGroupButton } from './components/addGroup';
 import { Groups } from './components/group';
 import { Header } from './components/header';
 import { MonthSummary } from './components/summary';
-import { currentMonthState } from './state';
-import { AddGroupButton } from './components/addGroup';
+import { currentMonthHistoryState, currentMonthState } from './state';
 
 export const Envelopes: React.FC = () => {
   const { month } = useParams<{ month: MonthInYear }>();
   const setCurrentMonth = useSetRecoilState(currentMonthState);
+  const [currentMonthHistory, setCurrentMonthHistory] = useRecoilState(currentMonthHistoryState);
 
   useEffect(() => {
     // even though it's typed in the useParams hook it comes out as string so just force it
     setCurrentMonth(month as MonthInYear);
-  }, [month, setCurrentMonth]);
+    setCurrentMonthHistory([...currentMonthHistory, month as MonthInYear]);
+  }, [month]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Verify that the month is a real month, if not kick back to current real-time month
   const isValid = isMonthValid(month as MonthInYear);

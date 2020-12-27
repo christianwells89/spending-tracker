@@ -60,7 +60,7 @@ export const TransactionsGrid: React.FC<TransactionsGridProps> = ({ data, showAc
           prepareRow(row);
           return (
             <tr
-              className="bg-white px-4 py-1 font-light text-sm leading-5 first:rounded-t-md last:rounded-b-md"
+              className="bg-white hover:bg-lightBlue-100 active:bg-lightBlue-200 px-4 py-1 font-light text-sm leading-5 first:rounded-t-md last:rounded-b-md cursor-pointer"
               {...row.getRowProps()}
             >
               {row.cells.map((cell) => {
