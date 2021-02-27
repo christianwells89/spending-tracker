@@ -17,7 +17,6 @@ export class EnvelopeMonth extends BaseEntityWithUid {
   @Field(() => String) // returns a MonthInYear string to the outside
   month: Date;
 
-  // eslint-disable-next-line @typescript-eslint/no-inferrable-types
   @Column('decimal', { precision: 20, scale: 2, default: 0 })
   @Field(() => Float)
   allocated: number;

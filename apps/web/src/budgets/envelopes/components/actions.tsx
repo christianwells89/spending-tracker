@@ -1,9 +1,30 @@
+import { DateTime } from 'luxon';
 import React from 'react';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import {
+  atom,
+  useRecoilState,
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from 'recoil';
 
+import { currentBudgetQuery } from 'budgets/state';
+import { Backdrop } from 'shared/components/backdrop';
 import { XSolid } from 'shared/components/icons';
 import { Panel } from 'shared/components/panel';
-import { envelopeSelectedQuery, envelopeSelectedState } from '../state';
+import {
+  envelopeSelectedQuery,
+  envelopeSelectedState,
+  monthForEnvelopeQuery,
+  relativeMonthQuery,
+} from '../state';
+import { formatMoney } from 'shared/utils/money';
+import { SkeletonLoader } from 'shared/components/skeletonBlock';
+
+export const EnvelopeActionsState = atom({
+  key: 'EnvelopeActionsState',
+  default: false,
+});
 
 // TODO: This should be an optional pane that can be activated from a button in the selected line?
 
@@ -23,17 +44,25 @@ import { envelopeSelectedQuery, envelopeSelectedState } from '../state';
 // Still not entirely happy with this name
 export const Actions: React.FC = () => {
   const envelopeSelectedId = useRecoilValue(envelopeSelectedState);
+  const [isOpen, setIsOpen] = useRecoilState(EnvelopeActionsState);
 
   return (
-    <Panel className="flex-1 max-w-md">
-      {envelopeSelectedId === null ? <AllEnvelopesActions /> : <SingleEnvelopeActions />}
-    </Panel>
+    <>
+      <Panel className="flex-1 max-w-md">
+        {envelopeSelectedId === null ? <AllEnvelopesActions /> : <SingleEnvelopeActions />}
+      </Panel>
+      <Backdrop isVisible={isOpen} onClick={() => setIsOpen(false)} />
+    </>
   );
 };
 
 const SingleEnvelopeActions: React.FC = () => {
-  const [, setSelectedEnvelopeId] = useRecoilState(envelopeSelectedState);
+  const setSelectedEnvelopeId = useSetRecoilState(envelopeSelectedState);
   const envelope = useRecoilValue(envelopeSelectedQuery);
+  // TODO: useRecoilValueLoadable a new query for detailed info about envelope month. Show wireframe
+  // while loading.
+  const previousMonth = useRecoilValue(relativeMonthQuery(-1));
+  const envelopeMonth = useRecoilValueLoadable(monthForEnvelopeQuery(parseInt(envelope.id, 10)));
 
   return (
     <div className="flex flex-col divide-y-2 divide-gray-200">
@@ -46,7 +75,49 @@ const SingleEnvelopeActions: React.FC = () => {
           />
         </div>
       </div>
-      <div>Actions will go here</div>
+      <div className="p-4 flex flex-col space-y-2 text-sm">
+        <SkeletonLoader loadable={envelopeMonth} className="h-4 w-full">
+          {(contents) => (
+            <EnvelopeMonthTotalsLine
+              category={`Cash Left Over From ${DateTime.fromISO(previousMonth).toFormat('LLLL')}`}
+              amount={contents.available - contents.allocated - contents.activity}
+            />
+          )}
+        </SkeletonLoader>
+        <SkeletonLoader loadable={envelopeMonth} className="h-4 w-full">
+          {(contents) => (
+            <EnvelopeMonthTotalsLine category="Budgeted This Month" amount={contents.allocated} />
+          )}
+        </SkeletonLoader>
+        <SkeletonLoader loadable={envelopeMonth} className="h-4 w-full">
+          {(contents) => (
+            <EnvelopeMonthTotalsLine category="Activity This Month" amount={contents.activity} />
+          )}
+        </SkeletonLoader>
+        <SkeletonLoader loadable={envelopeMonth} className="h-4 w-full">
+          {(contents) => (
+            <EnvelopeMonthTotalsLine category="Available" amount={contents.available} />
+          )}
+        </SkeletonLoader>
+      </div>
+      <div className="p-4">Next section</div>
+    </div>
+  );
+};
+
+interface EnvelopeMonthTotalsLineProps {
+  category: string;
+  amount: number;
+}
+
+const EnvelopeMonthTotalsLine: React.FC<EnvelopeMonthTotalsLineProps> = ({ category, amount }) => {
+  const { currency } = useRecoilValue(currentBudgetQuery);
+  const formattedAmount = formatMoney(amount, currency);
+
+  return (
+    <div className="flex border-none last:border-solid border-t-2 border-gray-200 last:pt-2">
+      <div className="flex-1">{category}</div>
+      <div className="font-semibold">{formattedAmount}</div>
     </div>
   );
 };

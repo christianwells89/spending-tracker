@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { atom, useRecoilState, useRecoilValue } from 'recoil';
 
-import { currentBudgetQuery } from 'budgets/state';
+import { currentBudgetQuery, EMPTY_BUDGET_ID } from 'budgets/state';
 import { XSolid } from 'shared/components/icons';
 import { AccountsSection } from './accountsSection';
 import { BudgetButton } from './budgetButton';
 import { NavItem } from './navItem';
+import { Backdrop } from '../backdrop';
 
 export const NavbarOpenState = atom({
   key: 'NavbarOpenState',
@@ -27,10 +28,13 @@ export const Navbar: React.FC = () => {
   const barClass = `flex flex-col py-4 px-2 top-0 left-0 w-96 bg-white fixed lg:static h-full\
     lg:h-auto overflow-auto transform ease-in-out transition-all duration-300 z-50 ${translation}\
     lg:translate-x-0 lg:transition-none shadow-md space-y-2`;
-  const bgDisplay = isOpen ? 'absolute' : 'hidden';
   const close = () => setIsOpen(false);
 
-  if (!budget) return null;
+  if (budget.id === EMPTY_BUDGET_ID) {
+    // TODO: In the case that no budget will be loaded (because of a new user) or it's on the add
+    // screen, there should be something here at least.
+    return null;
+  }
 
   // TODO: Budget settings page and nav item
 
@@ -52,7 +56,7 @@ export const Navbar: React.FC = () => {
         <NavItem to={`/budgets/${budget.uid}/envelopes`}>Envelopes</NavItem>
         <AccountsSection />
       </aside>
-      <div className={`lg:hidden inset-0 bg-black opacity-50 z-40 ${bgDisplay}`} onClick={close} />
+      <Backdrop isVisible={isOpen} onClick={close} />
     </>
   );
 };

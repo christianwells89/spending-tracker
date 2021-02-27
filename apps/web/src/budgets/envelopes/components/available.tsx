@@ -107,7 +107,7 @@ const Transfer: React.FC<TransferProps> = (props) => {
       return;
     }
 
-    await mutationCallback(parseFloat(formattedAmount), parseInt('2', 10));
+    await mutationCallback(parseFloat(formattedAmount), parseInt(toEnvelopeId, 10));
     closePopover();
   };
 

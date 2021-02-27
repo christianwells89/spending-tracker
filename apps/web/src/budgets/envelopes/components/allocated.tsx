@@ -111,7 +111,7 @@ const Allocate: React.FC<AllocateProps> = (props) => {
             </div>
             <input
               type="text"
-              name="allocated"
+              name="amount"
               className="block w-full pl-7 p-2 sm:text-sm rounded-md focus:ring-lightBlue-200 focus:ring-2 focus:border-lightBlue-200 border-trueGray-300 border"
               ref={register}
               autoFocus

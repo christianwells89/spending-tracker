@@ -1,17 +1,17 @@
-import { DateTime } from 'luxon';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
-import { MonthInYear } from '@st/types';
 import { Account, AllAccounts } from './accounts';
 import { Envelopes } from './envelopes';
 import {
   budgetsQuery,
   currentBudgetQuery,
   currentSelectedBudgetUidState,
+  EMPTY_BUDGET_ID,
   EMPTY_BUDGET_UID,
 } from './state';
+import { currentMonthState } from './envelopes/state';
 
 export const Budgets: React.FC = () => {
   const { path } = useRouteMatch();
@@ -19,13 +19,15 @@ export const Budgets: React.FC = () => {
   return (
     <Switch>
       <Route exact path={path}>
-        <React.Suspense fallback={<div>Loading budgets...</div>}>
+        <React.Suspense fallback={<div className="container">Loading budgets...</div>}>
           <BudgetRedirect />
         </React.Suspense>
       </Route>
       <Route path={`${path}/:uid`}>
-        <React.Suspense fallback={<div>Loading budget...</div>}>
-          <Budget />
+        <React.Suspense fallback={<div className="container">Loading budget...</div>}>
+          <RequireBudget>
+            <Budget />
+          </RequireBudget>
         </React.Suspense>
       </Route>
     </Switch>
@@ -53,20 +55,27 @@ const NoBudgets: React.FC = () => {
   return <div>Please add a budget.</div>;
 };
 
-const Budget: React.FC = () => {
+const RequireBudget: React.FC = ({ children }) => {
   const [currentUid, setCurrentUid] = useRecoilState(currentSelectedBudgetUidState);
   const { uid } = useParams<{ uid: string }>();
-  if (currentUid !== uid) setCurrentUid(uid);
+  const budget = useRecoilValue(currentBudgetQuery);
 
+  useEffect(() => {
+    setCurrentUid(uid);
+  }, [uid, setCurrentUid]);
+
+  if (currentUid === EMPTY_BUDGET_UID || budget.id === EMPTY_BUDGET_ID) {
+    // If above is the first time it's been set it won't be available until the next render, so some
+    // queries will try with a null budget and fail.
+    return null; // TODO: full screen loading component
+  }
+
+  return <>{children}</>;
+};
+
+const Budget: React.FC = () => {
   const { path } = useRouteMatch();
-  // The below line will cause a warning to be thrown because of Recoil. May get fixed later on,
-  // but doesn't seem obvious what the cause is reading through the git issue
-  const { timezone } = useRecoilValue(currentBudgetQuery);
-
-  const monthInYear = DateTime.local().setZone(timezone).toFormat('yyyy-LL') as MonthInYear;
-
-  // TODO: make an app-wide sidebar before accounts are going to be navigable again. They still need
-  // to be recoil-ified as well.
+  const selectedMonth = useRecoilValue(currentMonthState);
 
   return (
     <div className="container mx-auto p-2">
@@ -80,7 +89,7 @@ const Budget: React.FC = () => {
         <Route path={`${path}/accounts/:uid?`}>
           <Account />
         </Route>
-        <Redirect to={`${path}/envelopes/${monthInYear}`} />
+        <Redirect to={`${path}/envelopes/${selectedMonth}`} />
       </Switch>
     </div>
   );

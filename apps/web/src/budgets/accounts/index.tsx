@@ -21,8 +21,6 @@ export const Account: React.FC = () => {
 };
 
 export const AllAccounts: React.FC = () => {
-  // const { uid } = useParams<{ uid: string }>();
-  // console.log(uid);
   const transactions = useRecoilValue(transactionsQuery(null));
   const balance = useRecoilValue(allAccountsBalanceQuery);
 

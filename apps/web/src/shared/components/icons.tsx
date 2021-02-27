@@ -58,13 +58,51 @@ export const CogSolid = (props: React.SVGProps<SVGSVGElement>): JSX.Element => {
   );
 };
 
+export const ExclamationCircleOutline = (props: React.SVGProps<SVGSVGElement>): JSX.Element => {
+  return (
+    <svg
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+  );
+};
+
 export const LockSolid = (props: React.SVGProps<SVGSVGElement>): JSX.Element => {
   return (
-    <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" {...props}>
+    <svg fill="currentColor" viewBox="0 0 20 20" {...props}>
       <path
         fillRule="evenodd"
         d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
         clipRule="evenodd"
+      />
+    </svg>
+  );
+};
+
+export const PlusCircleOutline = (props: React.SVGProps<SVGSVGElement>): JSX.Element => {
+  return (
+    <svg
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"
       />
     </svg>
   );
@@ -78,6 +116,18 @@ export const ViewListOutline = (props: React.SVGProps<SVGSVGElement>): JSX.Eleme
         strokeLinejoin="round"
         strokeWidth="2"
         d="M4 6h16M4 10h16M4 14h16M4 18h16"
+      />
+    </svg>
+  );
+};
+
+export const XCircle = (props: React.SVGProps<SVGSVGElement>): JSX.Element => {
+  return (
+    <svg fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        fillRule="evenodd"
+        d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+        clipRule="evenodd"
       />
     </svg>
   );
